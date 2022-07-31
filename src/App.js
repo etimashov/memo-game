@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card } from './components/Card'
 import './App.css';
+import { ModalMessage } from './components/ModalMessage';
 
 const CARDS = [
   {src: "/img/01-card.jpg", matched: false},
@@ -20,12 +21,15 @@ function App() {
   const [secondSelection, setSecondSelection] = useState(null);
   const [flipBack, setFlipBack] = useState(false);
   const [disableClicks, setDisableClicks] = useState(false);
+  const [matches, setMatches] = useState(0);
+  const [modal, setModal] = useState(true);
 
   useEffect(() => {
     if (firstSelection && secondSelection) {
       //check similarity
       if (firstSelection.src === secondSelection.src) {
         //matched!
+        setMatches(matches + 1);
         let newDeck = deck.map((card) => {
           if (card.id === firstSelection.id || card.id === secondSelection.id) {
             let newCard = card;
@@ -50,6 +54,9 @@ function App() {
     } // eslint-disable-next-line
   }, [firstSelection, secondSelection]);
 
+  useEffect(() => {
+    startGame(); // eslint-disable-next-line
+  }, [])
   
   function startGame() {
     let newDeck = [...CARDS, ...CARDS]
@@ -58,9 +65,12 @@ function App() {
     
       setDeck(newDeck);
       setTurns(0);
+      setMatches(0);
 
       resetSelections();
       setFlipBack(false);
+
+      setModal(true);
 
       displayCards();
   }
@@ -104,7 +114,18 @@ function App() {
     setDisableClicks(false);
   }
 
-  //console.log(deck);
+function restartGame() {
+  setModal(false);
+  startGame();
+}
+
+  function checkWin() {
+    if (matches === (deck.length / 2)) {
+      return (
+        (modal && <ModalMessage score={turns} message="Click anywhere to start a new game" closeHandler={restartGame} />)
+      );
+    }
+  }
 
   return (
     <div className="App">
@@ -112,6 +133,7 @@ function App() {
       <div className='button' onClick={startGame}>New Game</div>
       {displayTurns()}
       {displayCards()}
+      {checkWin()}
     </div>
 
   );
