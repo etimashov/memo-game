@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from './components/Card'
 import './App.css';
 
@@ -16,6 +16,37 @@ const CARDS = [
 function App() {  
   const [deck, setDeck] = useState([]);
   const [turns, setTurns] = useState(0);
+  const [firstSelection, setFirstSelection] = useState(null);
+  const [secondSelection, setSecondSelection] = useState(null);
+  const [flipBack, setFlipBack] = useState(false);
+
+  useEffect(() => {
+    if (firstSelection && secondSelection) {
+      //check similarity
+      if (firstSelection.src === secondSelection.src) {
+        //matched!
+        let newDeck = deck.map((card) => {
+          if (card.id === firstSelection.id || card.id === secondSelection.id) {
+            let newCard = card;
+            newCard.matched = true;
+            return newCard;
+          }
+          else {
+            return card;
+          }
+        });
+
+        setDeck(newDeck);
+        resetSelections();
+      }
+      else {
+        //no match
+        setTimeout(resetSelections, 1000);
+        setTimeout((() => setFlipBack(true)), 1000);
+      }
+    }
+  }, [firstSelection, secondSelection, deck]);
+
   
   function startGame() {
     let newDeck = [...CARDS, ...CARDS]
@@ -25,6 +56,9 @@ function App() {
       setDeck(newDeck);
       setTurns(0);
 
+      resetSelections();
+      setFlipBack(false);
+
       displayCards();
   }
 
@@ -32,7 +66,12 @@ function App() {
     return (
       <div className="gameField">
         {deck.map(card => (
-            <Card card={card} key={card.id} clickHandler={handleClick}/>
+            <Card 
+              card={card} 
+              key={card.id} 
+              clickHandler={clickOnCard}
+              flipBack={flipBack}
+            />
         ))}
       </div>
     );
@@ -46,11 +85,21 @@ function App() {
     );
   }
 
-  function handleClick(card) {
-    console.log(card);
+  function clickOnCard(card) {
+    if (!firstSelection) {
+      setFirstSelection(card);
+      setFlipBack(false);
+    } else {
+      setSecondSelection(card);
+    }
   }
 
-  console.log(deck);
+  function resetSelections() {
+    setFirstSelection(null);
+    setSecondSelection(null);
+  }
+
+  //console.log(deck);
 
   return (
     <div className="App">

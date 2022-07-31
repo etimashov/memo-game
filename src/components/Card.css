@@ -29,6 +29,8 @@
 
   .card .back {
     transform: rotateY(0deg);
+    transition-duration: 0.2s;
+    transition-delay: 0;
   }
 
   .flipped .front {

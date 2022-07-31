@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Card.css'
 
-export function Card({card, clickHandler}) {
+export function Card({card, clickHandler, flipBack}) {
     const [flipped, setFlipped] = useState(false);
+    useEffect(() => {
+        setFlipped(flipped && !flipBack);
+    }, [flipBack, flipped]);
 
     function handleClick() {
         setFlipped(!flipped);
@@ -11,7 +14,7 @@ export function Card({card, clickHandler}) {
 
     return (
         <div className='card' key={card.id}>
-            <div className={flipped ? "flipped" : ""}>
+            <div className={flipped || card.matched ? "flipped" : ""}>
                 <img src={card.src} className="front" alt="card front"/>
                 <img 
                     src="/img/back.jpg" 
