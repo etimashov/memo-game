@@ -44,8 +44,9 @@ function App() {
         setTimeout(resetSelections, 1000);
         setTimeout((() => setFlipBack(true)), 1000);
       }
-    }
-  }, [firstSelection, secondSelection, deck]);
+      setTurns(turns + 1);
+    } // eslint-disable-next-line
+  }, [firstSelection, secondSelection]);
 
   
   function startGame() {
