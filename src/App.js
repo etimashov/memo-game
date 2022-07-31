@@ -1,24 +1,65 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import { Card } from './components/Card'
 import './App.css';
 
-function App() {
+const CARDS = [
+  {src: "/img/01-card.jpg", matched: false},
+  {src: "/img/02-card.jpg", matched: false},
+  {src: "/img/03-card.jpg", matched: false},
+  {src: "/img/04-card.jpg", matched: false},
+  {src: "/img/05-card.jpg", matched: false},
+  {src: "/img/06-card.jpg", matched: false},
+  {src: "/img/07-card.jpg", matched: false},
+  {src: "/img/08-card.jpg", matched: false}
+];
+
+function App() {  
+  const [deck, setDeck] = useState([]);
+  const [turns, setTurns] = useState(0);
+  
+  function startGame() {
+    let newDeck = [...CARDS, ...CARDS]
+      .sort(() => Math.random() - 0.5)
+      .map((card) => ({ ...card, id: Math.random()}));
+    
+      setDeck(newDeck);
+      setTurns(0);
+
+      displayCards();
+  }
+
+  function displayCards() {
+    return (
+      <div className="gameField">
+        {deck.map(card => (
+            <Card card={card} key={card.id} clickHandler={handleClick}/>
+        ))}
+      </div>
+    );
+  }
+
+  function displayTurns() {
+    return (
+      <div className="turns">
+        Turn: {turns}
+      </div>
+    );
+  }
+
+  function handleClick(card) {
+    console.log(card);
+  }
+
+  console.log(deck);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Underwater world</h1>
+      <div className='button' onClick={startGame}>New Game</div>
+      {displayTurns()}
+      {displayCards()}
     </div>
+
   );
 }
 

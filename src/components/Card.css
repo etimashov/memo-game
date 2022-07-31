@@ -1,0 +1,44 @@
+.gameField {
+    margin: 2rem auto;
+    max-width: 830px;
+    max-height: 830px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .card {
+    position: relative;
+  }
+  
+  .card img {
+    width:200px;
+    border-radius: 10px;
+    box-shadow: 3px 3px 5px rgb(0 0 0 / 0.3);
+  }
+  
+  .card img:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+
+  .card .front {
+    position: absolute;
+    transform: rotateY(90deg);
+  }
+
+  .card .back {
+    transform: rotateY(0deg);
+  }
+
+  .flipped .front {
+    transform: rotateY(0deg);
+    transition-delay: 0.2s;
+    transition-duration: 0.2s;
+  }
+
+  .flipped .back {
+    transform: rotateY(90deg);
+    transition-delay: 0;
+    transition-duration: 0.2s;
+  }
