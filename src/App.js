@@ -19,6 +19,7 @@ function App() {
   const [firstSelection, setFirstSelection] = useState(null);
   const [secondSelection, setSecondSelection] = useState(null);
   const [flipBack, setFlipBack] = useState(false);
+  const [disableClicks, setDisableClicks] = useState(false);
 
   useEffect(() => {
     if (firstSelection && secondSelection) {
@@ -41,6 +42,7 @@ function App() {
       }
       else {
         //no match
+        setDisableClicks(true);
         setTimeout(resetSelections, 1000);
         setTimeout((() => setFlipBack(true)), 1000);
       }
@@ -72,6 +74,7 @@ function App() {
               key={card.id} 
               clickHandler={clickOnCard}
               flipBack={flipBack}
+              disableClicks={disableClicks}
             />
         ))}
       </div>
@@ -98,6 +101,7 @@ function App() {
   function resetSelections() {
     setFirstSelection(null);
     setSecondSelection(null);
+    setDisableClicks(false);
   }
 
   //console.log(deck);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Card.css'
 
-export function Card({card, clickHandler, flipBack}) {
+export function Card({card, clickHandler, flipBack, disableClicks}) {
     const [flipped, setFlipped] = useState(false);
     useEffect(() => {
         setFlipped(flipped && !flipBack);
@@ -20,7 +20,7 @@ export function Card({card, clickHandler, flipBack}) {
                     src="/img/back.jpg" 
                     className="back" 
                     alt="card back" 
-                    onClick={handleClick}
+                    onClick={!disableClicks ? handleClick : undefined}
                 />
             </div>
         </div>
